@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Time Till Ela Ends</title>
+  <style>
+    body {
+      background-color: white;
+      font-family: sans-serif;
+      text-align: center;
+      padding-top: 80px;
+    }
+    h1 {
+      color: #3b5998;
+      font-size: 2em;
+      margin-bottom: 30px;
+    }
+    #countdown {
+      font-size: 2.5em;
+    }
+    .red-text {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>Time Till Ela Ends</h1>
+  <div id="countdown">Loading...</div>
+
+  <script>
+    function getNextTargetTime(hours, minutes) {
+      const now = new Date();
+      let target = new Date();
+      target.setHours(hours, minutes, 0, 0);
+      if (target <= now) {
+        target.setDate(target.getDate() + 1); // Move to next day
+      }
+      return target;
+    }
+
+    function startCountdown(hours, minutes) {
+      function updateCountdown() {
+        const now = new Date();
+        const target = getNextTargetTime(hours, minutes);
+        let diff = target - now;
+
+        const totalSeconds = Math.floor(diff / 1000);
+        const hoursLeft = Math.floor(totalSeconds / 3600);
+        const minutesLeft = Math.floor((totalSeconds % 3600) / 60);
+        const secondsLeft = totalSeconds % 60;
+        const tenths = Math.floor((diff % 1000) / 100);
+
+        let countdown = "";
+        const countdownEl = document.getElementById("countdown");
+
+        if (totalSeconds <= 60) {
+          countdown = `${minutesLeft.toString().padStart(2, '0')}:<span class='red-text'>${secondsLeft.toString().padStart(2, '0')}.${tenths}</span>`;
+        } else {
+          countdown = `${hoursLeft.toString().padStart(2, '0')}:${minutesLeft.toString().padStart(2, '0')}:<span>${secondsLeft.toString().padStart(2, '0')}</span>`;
+        }
+
+        countdownEl.innerHTML = countdown;
+      }
+
+      updateCountdown();
+      setInterval(updateCountdown, 100);
+    }
+
+    startCountdown(12, 38);
+  </script>
+</body>
+</html>
